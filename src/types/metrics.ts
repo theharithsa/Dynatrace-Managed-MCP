@@ -87,8 +87,8 @@ export const MetricDataPointSchema = z.object({
  */
 export const MetricQueryResultSchema = z.object({
   data: z.array(MetricDataPointSchema),
-  dataPointCountRatio: z.string().optional(),
-  dimensionCountRatio: z.string().optional(),
+  dataPointCountRatio: z.union([z.string(), z.number()]).optional(),
+  dimensionCountRatio: z.union([z.string(), z.number()]).optional(),
   metricId: z.string(),
   warnings: z.array(z.string()).optional(),
 });
@@ -97,7 +97,7 @@ export const MetricQueryResultSchema = z.object({
  * Metrics query response schema
  */
 export const MetricsQueryResponseSchema = z.object({
-  nextPageKey: z.string().optional(),
+  nextPageKey: z.string().nullable().optional(),
   resolution: z.string().optional(),
   result: z.array(MetricQueryResultSchema),
   totalCount: z.number(),
@@ -136,10 +136,10 @@ export const MetricIngestionResponseSchema = z.object({
     code: z.number(),
     invalidLines: z.array(InvalidLineSchema).optional(),
     message: z.string(),
-  }).optional(),
+  }).nullable().optional(),
   linesInvalid: z.number(),
   linesOk: z.number(),
-  warnings: IngestionWarningsSchema.optional(),
+  warnings: IngestionWarningsSchema.nullable().optional(),
 });
 
 /**

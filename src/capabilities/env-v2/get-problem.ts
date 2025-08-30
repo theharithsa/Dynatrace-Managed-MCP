@@ -9,7 +9,7 @@ import {
 } from '../../types/problems.js';
 
 export const getProblemTool: Tool = {
-  name: 'mcp_dynatrace-man_get_problem',
+  name: 'get_problem',
   description: 'Get detailed information about a specific problem by its ID',
   inputSchema: {
     type: 'object',

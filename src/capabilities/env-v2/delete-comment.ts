@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { DynatraceManagedClient } from '../../authentication/dynatrace-managed-client.js';
 
 export const deleteCommentTool: Tool = {
-  name: 'mcp_dynatrace-man_delete_comment',
+  name: 'delete_comment',
   description: 'Delete a specific comment from a problem',
   inputSchema: {
     type: 'object',

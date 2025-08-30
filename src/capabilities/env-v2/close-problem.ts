@@ -10,7 +10,7 @@ import {
 } from '../../types/problems.js';
 
 export const closeProblemTool: Tool = {
-  name: 'mcp_dynatrace-man_close_problem',
+  name: 'close_problem',
   description: 'Close a specific problem and add a closing comment',
   inputSchema: {
     type: 'object',

@@ -18,9 +18,9 @@ export const EventPropertiesResponseSchema = z.object({
 
 // Event Type schemas
 export const EventTypeInfoSchema = z.object({
-  description: z.string(),
+  description: z.string().optional(),
   displayName: z.string(),
-  severityLevel: z.enum(['AVAILABILITY', 'CUSTOM_ALERT', 'ERROR', 'INFO', 'MONITORING_UNAVAILABLE', 'PERFORMANCE', 'RESOURCE']),
+  severityLevel: z.enum(['AVAILABILITY', 'CUSTOM_ALERT', 'ERROR', 'INFO', 'MONITORING_UNAVAILABLE', 'PERFORMANCE', 'RESOURCE', 'RESOURCE_CONTENTION']),
   type: z.string()
 });
 
@@ -44,7 +44,7 @@ export const EntityTagSchema = z.object({
   context: z.string(),
   key: z.string(),
   stringRepresentation: z.string(),
-  value: z.string()
+  value: z.string().optional()
 });
 
 export const ManagementZoneSchema = z.object({

@@ -23,7 +23,7 @@ export const EntityTagSchema = z.object({
 export const EvidenceDetailSchema = z.object({
   displayName: z.string(),
   entity: EntityReferenceSchema,
-  groupingEntity: EntityReferenceSchema.optional(),
+  groupingEntity: EntityReferenceSchema.nullable(),
   rootCauseRelevant: z.boolean(),
   startTime: z.number()
 });
@@ -74,7 +74,7 @@ export const CommentSchema = z.object({
 export const RecentCommentsSchema = z.object({
   comments: z.array(CommentSchema),
   nextPageKey: z.string().optional(),
-  pageSize: z.number(),
+  pageSize: z.number().optional(),
   totalCount: z.number()
 });
 
@@ -101,7 +101,7 @@ export const ProblemSchema = z.object({
   problemFilters: z.array(ProblemFilterSchema),
   problemId: z.string(),
   recentComments: RecentCommentsSchema.optional(),
-  rootCauseEntity: EntityReferenceSchema.optional(),
+  rootCauseEntity: EntityReferenceSchema.nullable(),
   severityLevel: SeverityLevelSchema,
   startTime: z.number(),
   status: ProblemStatusSchema,

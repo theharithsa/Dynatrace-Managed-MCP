@@ -9,7 +9,7 @@ import {
 } from '../../types/problems.js';
 
 export const listCommentsTool: Tool = {
-  name: 'mcp_dynatrace-man_list_comments',
+  name: 'list_comments',
   description: 'Get all comments on a specific problem with pagination',
   inputSchema: {
     type: 'object',

@@ -88,7 +88,7 @@ export const EntityRelationshipTypeSchema = z.object({
  * Entity type schema
  */
 export const EntityTypeSchema = z.object({
-  entityLimitExceeded: z.string(),
+  entityLimitExceeded: z.union([z.string(), z.boolean()]),
   fromRelationships: z.array(EntityRelationshipTypeSchema).optional(),
   managementZones: z.string(),
   properties: z.array(EntityPropertySchema).optional(),
@@ -268,7 +268,7 @@ export const MonitoringStateSchema = z.object({
  * Monitoring states group schema
  */
 export const MonitoringStatesGroupSchema = z.object({
-  states: z.array(MonitoringStateSchema),
+  states: z.array(MonitoringStateSchema).optional(),
 });
 
 /**

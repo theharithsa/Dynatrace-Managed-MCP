@@ -22,14 +22,36 @@ export async function handleGetEnvironmentInfo(
   client: DynatraceManagedClient
 ): Promise<any> {
   try {
-    // Get cluster version
-    const versionResponse = await client.get<ClusterVersion>('/config/clusterversion');
-    const clusterVersion = ClusterVersionSchema.parse(versionResponse.data);
+    // Try to get cluster version from the cluster API endpoint first
+    let clusterVersion: ClusterVersion;
+    let clusterTimeMs: number;
+    let clusterTimeUtc: string;
     
-    // Get cluster time
-    const timeResponse = await client.get<string>('/time');
-    const clusterTimeMs = parseInt(timeResponse.data);
-    const clusterTimeUtc = new Date(clusterTimeMs).toISOString();
+    try {
+      // Try different possible endpoints for cluster version
+      const versionResponse = await client.get<ClusterVersion>('/config/clusterversion');
+      clusterVersion = ClusterVersionSchema.parse(versionResponse.data);
+    } catch (error) {
+      // Fallback: try alternative endpoint or create a default version
+      try {
+        const altVersionResponse = await client.get<ClusterVersion>('/clusterversion');
+        clusterVersion = ClusterVersionSchema.parse(altVersionResponse.data);
+      } catch (altError) {
+        // If all version endpoints fail, use a default or derive from other info
+        clusterVersion = { version: 'Unknown - API endpoint not accessible' };
+      }
+    }
+    
+    try {
+      // Try to get cluster time
+      const timeResponse = await client.get<string>('/time');
+      clusterTimeMs = parseInt(timeResponse.data);
+      clusterTimeUtc = new Date(clusterTimeMs).toISOString();
+    } catch (error) {
+      // Fallback to local time if cluster time is not available
+      clusterTimeMs = Date.now();
+      clusterTimeUtc = new Date(clusterTimeMs).toISOString();
+    }
     
     // Get environment details from config
     const config = (client as any).config;

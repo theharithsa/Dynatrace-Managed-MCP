@@ -74,24 +74,30 @@ export async function handleListMonitoringStates(
     const monitoringStates = MonitoringStatesResponseSchema.parse(response.data);
 
     // Process and categorize monitoring states
-    const allStates = monitoringStates.monitoringStates.flatMap(group => group.states);
+    const allStates = monitoringStates.monitoringStates
+      .flatMap(group => group.states || [])
+      .filter(state => state !== undefined);
     
     // Group states by severity
     const statesBySeverity = new Map<string, typeof allStates>();
     allStates.forEach(state => {
-      if (!statesBySeverity.has(state.severity)) {
-        statesBySeverity.set(state.severity, []);
+      if (state && state.severity) {
+        if (!statesBySeverity.has(state.severity)) {
+          statesBySeverity.set(state.severity, []);
+        }
+        statesBySeverity.get(state.severity)!.push(state);
       }
-      statesBySeverity.get(state.severity)!.push(state);
     });
 
     // Group states by state type
     const statesByType = new Map<string, typeof allStates>();
     allStates.forEach(state => {
-      if (!statesByType.has(state.state)) {
-        statesByType.set(state.state, []);
+      if (state && state.state) {
+        if (!statesByType.has(state.state)) {
+          statesByType.set(state.state, []);
+        }
+        statesByType.get(state.state)!.push(state);
       }
-      statesByType.get(state.state)!.push(state);
     });
 
     // Sort by severity priority
@@ -117,15 +123,17 @@ export async function handleListMonitoringStates(
         formattedOutput += `#### ${severityIcon} ${severity.toUpperCase()} (${states.length})\n`;
         
         states.forEach((state, index) => {
-          formattedOutput += `**${index + 1}. ${state.entityId}**\n`;
-          formattedOutput += `   - **State:** ${state.state.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}\n`;
-          formattedOutput += `   - **Severity:** ${severity}\n`;
-          
-          if (state.parameters && state.parameters.length > 0) {
-            const params = state.parameters.map(p => `${p.key}=${p.value}`).join(', ');
-            formattedOutput += `   - **Parameters:** ${params}\n`;
+          if (state && state.entityId && state.state && state.severity) {
+            formattedOutput += `**${index + 1}. ${state.entityId}**\n`;
+            formattedOutput += `   - **State:** ${state.state.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}\n`;
+            formattedOutput += `   - **Severity:** ${severity}\n`;
+            
+            if (state.parameters && state.parameters.length > 0) {
+              const params = state.parameters.map(p => `${p.key}=${p.value}`).join(', ');
+              formattedOutput += `   - **Parameters:** ${params}\n`;
+            }
+            formattedOutput += '\n';
           }
-          formattedOutput += '\n';
         });
       });
     }

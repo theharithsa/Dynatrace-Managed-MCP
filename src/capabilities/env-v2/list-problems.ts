@@ -9,7 +9,7 @@ import {
 } from '../../types/problems.js';
 
 export const listProblemsTool: Tool = {
-  name: 'mcp_dynatrace-man_list_problems',
+  name: 'list_problems',
   description: 'List problems observed within the specified timeframe with comprehensive filtering and sorting options',
   inputSchema: {
     type: 'object',

@@ -8,7 +8,7 @@ import {
 } from '../../types/problems.js';
 
 export const getCommentTool: Tool = {
-  name: 'mcp_dynatrace-man_get_comment',
+  name: 'get_comment',
   description: 'Get a specific comment from a problem by comment ID',
   inputSchema: {
     type: 'object',

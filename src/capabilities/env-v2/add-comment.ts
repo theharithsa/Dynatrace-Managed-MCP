@@ -8,7 +8,7 @@ import {
 } from '../../types/problems.js';
 
 export const addCommentTool: Tool = {
-  name: 'mcp_dynatrace-man_add_comment',
+  name: 'add_comment',
   description: 'Add a new comment to a specific problem',
   inputSchema: {
     type: 'object',
