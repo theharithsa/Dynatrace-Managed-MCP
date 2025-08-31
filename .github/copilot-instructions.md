@@ -1,48 +1,51 @@
 # Dynatrace Managed MCP Server
 
-This project is a Model Context Protocol (MCP) server for Dynatrace Managed, providing Events API v2 integration with token-based authentication.
+This project is a Model Context Protocol (MCP) server for Dynatrace Managed, following the same simple approach as the SaaS MCP server.
 
 ## Project Structure
-- Uses TypeScript for type safety
+- Simple single-file approach (src/index.ts)
 - Token-based authentication (no OAuth required)
-- Events API v2 tools and capabilities
+- Raw JSON responses for AI model interpretation
 - Environment-specific URL structure (/e/{env-id}/api/v2/)
+- Zod schemas for input validation (like SaaS MCP servers)
 
 ## Development Guidelines
-- Follow MCP specification standards
-- Use proper error handling and validation
-- Implement comprehensive logging
-- Include unit and integration tests
+- Keep it simple - follow SaaS MCP server pattern
+- Use direct axios HTTP calls
+- Return raw JSON data for AI models to interpret
+- Use Zod schemas for input validation with zodToJsonSchema
+- DO NOT create unnecessary markdown files
+- DO NOT over-engineer with complex types or schemas
+- Single file approach preferred
 
-## Completed Steps
-- [x] Created project structure
-- [x] Set up package.json and dependencies
-- [x] Implement core authentication
-- [x] Add Events API v2 capabilities
-- [x] Create tests
-- [x] Documentation
-- [x] Compiled successfully
-- [x] All build and test processes working
-- [x] Environment info capability added
+## Current Implementation
+- [x] Simplified to single index.ts file (~230 lines)
+- [x] Direct axios HTTP client
+- [x] Environment variable configuration
+- [x] Raw JSON responses
+- [x] 8 core tools implemented
+- [x] API token authentication
+- [x] Zod schemas for input validation (following SaaS pattern)
 
-## Available Tools
-1. **get_environment_info** - Get environment details, cluster version, and health status
-2. **list_event_properties** - List all event properties with pagination
-3. **get_event_property** - Get event property details by key
-4. **list_events** - List events with filtering and pagination
-5. **get_event** - Get event details by ID
-6. **ingest_event** - Ingest custom events into Dynatrace
-7. **list_event_types** - List all event types with pagination
-8. **get_event_type** - Get event type details
+## Available Tools (All return raw JSON)
+1. **list_problems** - List problems in environment
+2. **get_problem** - Get problem details by ID
+3. **list_entities** - List monitored entities
+4. **get_entity** - Get entity details by ID
+5. **list_metrics** - List available metrics
+6. **query_metrics** - Query metric data
+7. **list_events** - List events
+8. **execute_dql** - Execute DQL queries
 
 ## Ready for Use
-The MCP server is complete and ready for production use. Users need to:
-1. Configure environment variables in .env file (URL, Environment ID, API Token)
-2. Build the project with `npm run build`
-3. Configure their MCP client to use the server
-4. Start using the tools through natural language
+The MCP server is simple and ready for production use. Users need to:
+1. Set environment variables (DYNATRACE_MANAGED_URL, DYNATRACE_ENVIRONMENT_ID, DYNATRACE_API_TOKEN)
+2. Build with `npm run build`
+3. Run with `npm start`
 
-## Next Steps
-- Test with actual Dynatrace Managed instance
-- Add additional capabilities as needed
-- Improve error handling and logging
+## Important Notes
+- STOP creating unnecessary documentation files
+- Keep the simple approach like SaaS MCP server
+- All tools should return raw JSON for AI interpretation
+- Use Zod schemas for input validation exactly like SaaS MCP servers
+- Use safeParse() for validation in tool handlers

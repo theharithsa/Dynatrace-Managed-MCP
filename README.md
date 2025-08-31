@@ -7,9 +7,20 @@
 ![Node.js Version](https://img.shields.io/node/v/dynatrace-managed-mcp?style=flat-square)
 ![Coverage](https://img.shields.io/codecov/c/github/theharithsa/dynatrace-managed-mcp?style=flat-square)
 
+A Model Context Protocol (MCP) server for Dynatrace Managed that provides comprehensive API integration with flexible data handling for AI models.
 
+---
 
-A Model Context Protocol (MCP) server for Dynatrace Managed that provides Events API v2 integration with token-based authentication.
+## ✨ Key Enhancements
+
+### 🧠 **AI-First Design**
+This MCP server is designed with modern AI models in mind. Instead of pre-formatting responses, it returns raw JSON data that AI models can intelligently interpret and format as needed. This makes the server truly "plug and play" with any AI client.
+
+### 🔄 **Flexible Data Approach**
+- **Raw JSON Responses**: Returns actual API response data for models to interpret
+- **No Pre-formatting**: Let AI models handle data presentation and analysis
+- **Future-Proof**: Automatically supports new API fields without code changes
+- **Universal Compatibility**: Works with any AI model or client
 
 ---
 
@@ -30,23 +41,59 @@ A Model Context Protocol (MCP) server for Dynatrace Managed that provides Events
 
 ---
 
-
 ## Features
 
-- 🔧 **Events API v2 Support**: Complete support for Dynatrace Managed Events API v2
+- 🔧 **Complete API Coverage**: Support for Events, Metrics, Entities, Problems, Audit Logs, and more
 - 🔑 **Token-based Authentication**: Simple API token authentication (no OAuth required)
-- 📊 **Event Management**: List, retrieve, and ingest events and event types
-- 🏷️ **Event Properties**: Manage event properties and metadata
-- 💾 **Event Ingestion**: Ingest custom events into Dynatrace
-- 📈 **Environment Info**: Get cluster information and environment status
-- 🛡️ **Type Safety**: Built with TypeScript and Zod for runtime validation
+- 📊 **Comprehensive Event Management**: List, retrieve, and ingest events and event types
+- 🏷️ **Entity & Tag Management**: Manage entities, tags, and relationships
+- 💾 **Metrics Integration**: Query, ingest, and manage custom metrics
+- 🚨 **Problem Management**: Monitor and manage problems with comments
+- 📈 **Environment Monitoring**: Get cluster information and monitoring states
+- 🧠 **AI-Optimized**: Returns raw JSON for intelligent model interpretation
+- 🛡️ **Type Safety**: Built with TypeScript for development-time safety
 - 🧪 **Comprehensive Testing**: Unit and integration tests included
-
 
 ## Available Tools
 
-### `get_environment_info`
-Get detailed information about the Dynatrace Managed environment including cluster version, time, and configuration.
+### Environment & Info
+- `get_environment_info` - Get cluster version, time, and configuration
+- `convert_unit` - Convert values between different units
+- `list_monitoring_states` - Get monitoring states of process group instances
+
+### 🚨 Problems Management
+- `list_problems` - List problems with filtering and pagination
+- `get_problem` - Get detailed problem information
+- `close_problem` - Close problems with comments
+- `add_comment` - Add comments to problems
+- `list_comments` - List problem comments
+- `get_comment` - Get specific comment details
+- `update_comment` - Update comment content
+- `delete_comment` - Delete comments
+
+### 📊 Metrics Management  
+- `list_metrics` - List available metrics with filtering
+- `get_metric` - Get metric descriptor details
+- `query_metrics` - Query metric data points
+- `ingest_metrics` - Ingest custom metric data
+- `delete_metric` - Delete custom metrics
+- `list_units` - List available measurement units
+
+### 🏢 Entity Management
+- `list_entities` - List monitored entities with filtering
+- `get_entity` - Get detailed entity information  
+- `create_custom_device` - Create custom device entities
+- `list_entity_types` - List available entity types
+- `get_entity_type` - Get entity type details
+
+### 🏷️ Tag Management
+- `list_tags` - List tags applied to entities
+- `add_tags` - Add tags to entities
+- `delete_tags` - Remove tags from entities
+
+### 📋 Audit Logs
+- `list_audit_logs` - List audit log entries with filtering
+- `get_audit_log` - Get specific audit log entry
 
 **Parameters:** None
 
