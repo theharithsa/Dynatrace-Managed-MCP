@@ -1,11 +1,32 @@
 #!/usr/bin/env node
 
+// OpenTelemetry MCP Instrumentation - Auto Registration
+import '@theharithsa/opentelemetry-instrumentation-mcp/register';
+
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { config } from 'dotenv';
+import { Command } from 'commander';
+import { randomUUID } from 'node:crypto';
+
+// Initialize CLI program
+const program = new Command();
+
+// Load environment variables from .env file if available
+// Suppress warnings/logging to stdio as it breaks MCP communication when using stdio transport
+const dotEnvOutput = config();
+
+if (dotEnvOutput.error) {
+  // Only log error if it's not about missing .env file
+  if ((dotEnvOutput.error as NodeJS.ErrnoException).code !== 'ENOENT') {
+    console.error('Error loading .env file:', dotEnvOutput.error);
+    process.exit(1);
+  }
+}
 
 // Import all capabilities following SaaS pattern (39 tools total)
 import { addComment } from './capabilities/add-comment.js';
@@ -48,175 +69,253 @@ import { listVulnerabilities } from './capabilities/list-vulnerabilities.js';
 import { queryMetrics } from './capabilities/query-metrics.js';
 import { updateComment } from './capabilities/update-comment.js';
 
-// Import environment configuration following SaaS pattern
+// Import environment configuration
 import { getDynatraceEnv } from './getDynatraceEnv.js';
 
-// Get environment configuration
-const dtEnv = getDynatraceEnv();
+// OpenTelemetry API imports for tool wrapper pattern
+import { trace, context, SpanStatusCode, SpanKind } from '@opentelemetry/api';
 
-// Create server
-const server = new Server(
-  {
-    name: 'dynatrace-managed-mcp',
-    version: '1.0.0',
-  },
-  {
-    capabilities: {
-      tools: {},
-    },
-  }
-);
-
-// Define all tools following SaaS pattern (39 tools total)
-const tools = [
-  addComment.definition,
-  addTags.definition,
-  closeProblem.definition,
-  createCustomDevice.definition,
-  deleteComment.definition,
-  deleteMetric.definition,
-  deleteTags.definition,
-  findMonitoredEntityByName.definition,
-  getAuditLog.definition,
-  getComment.definition,
-  getEntityType.definition,
-  getEntity.definition,
-  getEventProperty.definition,
-  getEventType.definition,
-  getEvent.definition,
-  getLogsForEntity.definition,
-  getMetric.definition,
-  getMonitoredEntityDetails.definition,
-  getProblemDetails.definition,
-  getProblem.definition,
-  getUnit.definition,
-  getVulnerabilityDetails.definition,
-  ingestEvent.definition,
-  ingestMetrics.definition,
-  listAuditLogs.definition,
-  listComments.definition,
-  listEntities.definition,
-  listEntityTypes.definition,
-  listEventProperties.definition,
-  listEventTypes.definition,
-  listEvents.definition,
-  listMetrics.definition,
-  listMonitoringStates.definition,
-  listProblems.definition,
-  listTags.definition,
-  listUnits.definition,
-  listVulnerabilities.definition,
-  queryMetrics.definition,
-  updateComment.definition,
-];
-
-// List tools handler
-server.setRequestHandler(ListToolsRequestSchema, async () => {
-  return { tools };
-});
-
-// Call tool handler following SaaS pattern
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args } = request.params;
-
+/**
+ * Package version helper
+ */
+function getPackageJsonVersion(): string {
   try {
-    switch (name) {
-      case 'add_comment':
-        return await addComment.handler(args, dtEnv);
-      case 'add_tags':
-        return await addTags.handler(args, dtEnv);
-      case 'close_problem':
-        return await closeProblem.handler(args, dtEnv);
-      case 'create_custom_device':
-        return await createCustomDevice.handler(args, dtEnv);
-      case 'delete_comment':
-        return await deleteComment.handler(args, dtEnv);
-      case 'delete_metric':
-        return await deleteMetric.handler(args, dtEnv);
-      case 'delete_tags':
-        return await deleteTags.handler(args, dtEnv);
-      case 'find_monitored_entity_by_name':
-        return await findMonitoredEntityByName.handler(args, dtEnv);
-      case 'get_audit_log':
-        return await getAuditLog.handler(args, dtEnv);
-      case 'get_comment':
-        return await getComment.handler(args, dtEnv);
-      case 'get_entity_type':
-        return await getEntityType.handler(args, dtEnv);
-      case 'get_entity':
-        return await getEntity.handler(args, dtEnv);
-      case 'get_event_property':
-        return await getEventProperty.handler(args, dtEnv);
-      case 'get_event_type':
-        return await getEventType.handler(args, dtEnv);
-      case 'get_event':
-        return await getEvent.handler(args, dtEnv);
-      case 'get_logs_for_entity':
-        return await getLogsForEntity.handler(args, dtEnv);
-      case 'get_metric':
-        return await getMetric.handler(args, dtEnv);
-      case 'get_monitored_entity_details':
-        return await getMonitoredEntityDetails.handler(args, dtEnv);
-      case 'get_problem_details':
-        return await getProblemDetails.handler(args, dtEnv);
-      case 'get_problem':
-        return await getProblem.handler(args, dtEnv);
-      case 'get_unit':
-        return await getUnit.handler(args, dtEnv);
-      case 'get_vulnerability_details':
-        return await getVulnerabilityDetails.handler(args, dtEnv);
-      case 'ingest_event':
-        return await ingestEvent.handler(args, dtEnv);
-      case 'ingest_metrics':
-        return await ingestMetrics.handler(args, dtEnv);
-      case 'list_audit_logs':
-        return await listAuditLogs.handler(args, dtEnv);
-      case 'list_comments':
-        return await listComments.handler(args, dtEnv);
-      case 'list_entities':
-        return await listEntities.handler(args, dtEnv);
-      case 'list_entity_types':
-        return await listEntityTypes.handler(args, dtEnv);
-      case 'list_event_properties':
-        return await listEventProperties.handler(args, dtEnv);
-      case 'list_event_types':
-        return await listEventTypes.handler(args, dtEnv);
-      case 'list_events':
-        return await listEvents.handler(args, dtEnv);
-      case 'list_metrics':
-        return await listMetrics.handler(args, dtEnv);
-      case 'list_monitoring_states':
-        return await listMonitoringStates.handler(args, dtEnv);
-      case 'list_problems':
-        return await listProblems.handler(args, dtEnv);
-      case 'list_tags':
-        return await listTags.handler(args, dtEnv);
-      case 'list_units':
-        return await listUnits.handler(args, dtEnv);
-      case 'list_vulnerabilities':
-        return await listVulnerabilities.handler(args, dtEnv);
-      case 'query_metrics':
-        return await queryMetrics.handler(args, dtEnv);
-      case 'update_comment':
-        return await updateComment.handler(args, dtEnv);
-
-      default:
-        throw new Error(`Unknown tool: ${name}`);
-    }
-  } catch (error) {
-    return {
-      content: [{ 
-        type: 'text', 
-        text: `Error: ${error instanceof Error ? error.message : String(error)}` 
-      }],
-      isError: true,
-    };
+    // Try to read version from npm environment
+    return process.env.npm_package_version || '1.1.0';
+  } catch {
+    return '1.1.0';
   }
-});
+}
+
+/**
+ * Enhanced error handling with detailed context
+ */
+class McpError extends Error {
+  constructor(
+    message: string,
+    public readonly code?: string,
+    public readonly details?: Record<string, unknown>
+  ) {
+    super(message);
+    this.name = 'McpError';
+  }
+}
+
+/**
+ * Create and configure MCP server
+ */
+function createMcpServer() {
+  // Validate environment configuration early
+  const dtEnv = getDynatraceEnv();
+
+  const server = new Server(
+    {
+      name: 'dynatrace-managed-mcp-server',
+      version: getPackageJsonVersion(),
+    },
+    {
+      capabilities: {
+        tools: {},
+      },
+    }
+  );
+
+  return { server, dtEnv };
+}
+
+// Server will be initialized in main function
+
+// Set up CLI
+program
+  .name('dynatrace-managed-mcp')
+  .description('Dynatrace Managed MCP Server')
+  .version(getPackageJsonVersion())
+  .option('--stdio', 'Use stdio transport (default)')
+  .parse();
+
+/**
+ * OpenTelemetry tracer for parent span creation
+ */
+const tracer = trace.getTracer('dynatrace-managed-mcp-server', getPackageJsonVersion());
 
 // Start server
 async function main() {
   try {
+    // Initialize server and environment
+    const { server, dtEnv } = createMcpServer();
+
+    // Define all tools following SaaS pattern (39 tools total)
+    const tools = [
+      addComment.definition,
+      addTags.definition,
+      closeProblem.definition,
+      createCustomDevice.definition,
+      deleteComment.definition,
+      deleteMetric.definition,
+      deleteTags.definition,
+      findMonitoredEntityByName.definition,
+      getAuditLog.definition,
+      getComment.definition,
+      getEntityType.definition,
+      getEntity.definition,
+      getEventProperty.definition,
+      getEventType.definition,
+      getEvent.definition,
+      getLogsForEntity.definition,
+      getMetric.definition,
+      getMonitoredEntityDetails.definition,
+      getProblemDetails.definition,
+      getProblem.definition,
+      getUnit.definition,
+      getVulnerabilityDetails.definition,
+      ingestEvent.definition,
+      ingestMetrics.definition,
+      listAuditLogs.definition,
+      listComments.definition,
+      listEntities.definition,
+      listEntityTypes.definition,
+      listEventProperties.definition,
+      listEventTypes.definition,
+      listEvents.definition,
+      listMetrics.definition,
+      listMonitoringStates.definition,
+      listProblems.definition,
+      listTags.definition,
+      listUnits.definition,
+      listVulnerabilities.definition,
+      queryMetrics.definition,
+      updateComment.definition,
+    ];
+
+    // Tool handler mapping for cleaner routing with OpenTelemetry
+    const toolHandlers = new Map([
+      ['add_comment', addComment.handler],
+      ['add_tags', addTags.handler],
+      ['close_problem', closeProblem.handler],
+      ['create_custom_device', createCustomDevice.handler],
+      ['delete_comment', deleteComment.handler],
+      ['delete_metric', deleteMetric.handler],
+      ['delete_tags', deleteTags.handler],
+      ['find_monitored_entity_by_name', findMonitoredEntityByName.handler],
+      ['get_audit_log', getAuditLog.handler],
+      ['get_comment', getComment.handler],
+      ['get_entity_type', getEntityType.handler],
+      ['get_entity', getEntity.handler],
+      ['get_event_property', getEventProperty.handler],
+      ['get_event_type', getEventType.handler],
+      ['get_event', getEvent.handler],
+      ['get_logs_for_entity', getLogsForEntity.handler],
+      ['get_metric', getMetric.handler],
+      ['get_monitored_entity_details', getMonitoredEntityDetails.handler],
+      ['get_problem_details', getProblemDetails.handler],
+      ['get_problem', getProblem.handler],
+      ['get_unit', getUnit.handler],
+      ['get_vulnerability_details', getVulnerabilityDetails.handler],
+      ['ingest_event', ingestEvent.handler],
+      ['ingest_metrics', ingestMetrics.handler],
+      ['list_audit_logs', listAuditLogs.handler],
+      ['list_comments', listComments.handler],
+      ['list_entities', listEntities.handler],
+      ['list_entity_types', listEntityTypes.handler],
+      ['list_event_properties', listEventProperties.handler],
+      ['list_event_types', listEventTypes.handler],
+      ['list_events', listEvents.handler],
+      ['list_metrics', listMetrics.handler],
+      ['list_monitoring_states', listMonitoringStates.handler],
+      ['list_problems', listProblems.handler],
+      ['list_tags', listTags.handler],
+      ['list_units', listUnits.handler],
+      ['list_vulnerabilities', listVulnerabilities.handler],
+      ['query_metrics', queryMetrics.handler],
+      ['update_comment', updateComment.handler],
+    ]);
+
+    // Handle list tools request
+    server.setRequestHandler(ListToolsRequestSchema, async () => {
+      return { tools };
+    });
+
+    // Handle tool calls with enhanced error handling, request tracking, and OpenTelemetry tracing
+    server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
+      const requestId = randomUUID();
+      const { name, arguments: args } = request.params;
+
+      console.error(`[${requestId}] Tool call: ${name} - OTEL tracing enabled`);
+
+      // Create parent span using the tool wrapper pattern for proper span hierarchy
+      return await tracer.startActiveSpan(
+        `Tool.${name}`,
+        {
+          kind: SpanKind.SERVER,
+          attributes: {
+            'tool.name': name,
+            'tool.args': JSON.stringify(args),
+            'mcp.request.id': requestId,
+            'service.name': 'mcp-server-managed-lab-dt',
+            'service.version': getPackageJsonVersion(),
+          },
+        },
+        async (span) => {
+          try {
+            // Get tool handler from mapping
+            const handler = toolHandlers.get(name);
+            if (!handler) {
+              throw new McpError(`Unknown tool: ${name}`, 'UNKNOWN_TOOL');
+            }
+
+            // Execute tool within the active span context for proper parent-child relationships
+            const result = await context.with(trace.setSpan(context.active(), span), async () => {
+              return await handler(args, dtEnv);
+            });
+
+            span.setStatus({ code: SpanStatusCode.OK });
+            span.setAttributes({
+              'mcp.tool.success': true,
+              'mcp.tool.result.length': JSON.stringify(result).length,
+            });
+
+            console.error(`[${requestId}] Tool call completed: ${name} - Trace: ${span.spanContext().traceId}`);
+            return result;
+          } catch (error: unknown) {
+            // Record exception in span and mark as error
+            span.recordException(error instanceof Error ? error : new Error(String(error)));
+            span.setStatus({
+              code: SpanStatusCode.ERROR,
+              message: error instanceof Error ? error.message : String(error),
+            });
+            span.setAttributes({
+              'mcp.tool.success': false,
+              'mcp.tool.error': error instanceof Error ? error.message : String(error),
+            });
+
+            console.error(`[${requestId}] Tool call failed: ${name} - Span marked as ERROR`, error);
+
+            if (error instanceof McpError) {
+              return {
+                content: [{ 
+                  type: 'text', 
+                  text: `Error: ${error.message}${error.code ? ` (${error.code})` : ''}${
+                    error.details ? `\n\nDetails: ${JSON.stringify(error.details, null, 2)}` : ''
+                  }` 
+                }],
+                isError: true,
+              };
+            }
+
+            return {
+              content: [{ 
+                type: 'text', 
+                text: `Unexpected error: ${error instanceof Error ? error.message : String(error)}` 
+              }],
+              isError: true,
+            };
+          } finally {
+            span.end();
+          }
+        }
+      );
+    });
+
     const transport = new StdioServerTransport();
     await server.connect(transport);
     console.error('Dynatrace Managed MCP Server running on stdio');

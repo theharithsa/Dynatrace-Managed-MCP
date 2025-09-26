@@ -7,7 +7,16 @@
 ![Node.js Version](https://img.shields.io/node/v/dynatrace-managed-mcp?style=flat-square)
 ![Coverage](https://img.shields.io/codecov/c/github/theharithsa/dynatrace-managed-mcp?style=flat-square)
 
-A Model Context Protocol (MCP) server for Dynatrace Managed that provides comprehensive API integration with flexible data handling for AI models.
+A comprehensive Model Context Protocol (MCP) server for Dynatrace Managed environments. This server provides **39 production-ready tools** covering the complete Dynatrace Managed API surface - from problems and metrics to entities, events, and security analysis.
+
+## 🚀 Key Features
+
+✨ **39 Production Tools** - Complete API coverage for observability, security, and automation  
+🔗 **Built-in OpenTelemetry** - Automatic distributed tracing with parent-child span relationships  
+🛡️ **Enterprise Ready** - API token authentication, comprehensive error handling, request tracking  
+📊 **Full Observability** - Problems, metrics, entities, events, audit logs, and security vulnerabilities  
+🎯 **Zero Configuration** - Auto-registration with custom OpenTelemetry instrumentation  
+🔍 **Complete Traceability** - Every API call traced with performance metrics and error tracking
 
 ---
 
@@ -52,7 +61,9 @@ This MCP server is designed with modern AI models in mind. Instead of pre-format
 - 📈 **Environment Monitoring**: Get cluster information and monitoring states
 - 🧠 **AI-Optimized**: Returns raw JSON for intelligent model interpretation
 - 🛡️ **Type Safety**: Built with TypeScript for development-time safety
-- 🧪 **Comprehensive Testing**: Unit and integration tests included
+- 📡 **OpenTelemetry Tracing**: Full distributed tracing with parent-child span relationships
+- 🔍 **Observability Ready**: Built-in monitoring and performance tracking
+- 🧪 **Production Ready**: Comprehensive testing with 39+ validated tools
 
 ## Available Tools
 
@@ -249,16 +260,30 @@ Example client configuration:
 
 ### Environment Variables
 
+#### Core Configuration
+
 | Variable | Required | Description | Default |
 |----------|----------|-------------|---------|
 | `DYNATRACE_MANAGED_URL` | Yes | Your Dynatrace Managed cluster URL | - |
 | `DYNATRACE_ENVIRONMENT_ID` | Yes | Your environment ID in the Dynatrace Managed cluster | - |
-| `DYNATRACE_API_TOKEN` | Yes | API token with events management permissions | - |
-| `MCP_SERVER_NAME` | No | Server name for identification | `dynatrace-managed-events-mcp` |
+| `DYNATRACE_API_TOKEN` | Yes | API token with comprehensive API permissions | - |
+| `MCP_SERVER_NAME` | No | Server name for identification | `dynatrace-managed-mcp-server` |
 | `MCP_SERVER_VERSION` | No | Server version for identification | `1.0.0` |
 | `LOG_LEVEL` | No | Logging level | `info` |
 | `REQUEST_TIMEOUT` | No | Request timeout in milliseconds | `30000` |
 | `MAX_RETRIES` | No | Maximum number of retries for failed requests | `3` |
+
+#### OpenTelemetry Tracing Configuration
+
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | Yes | OTLP endpoint for trace export | `https://your-tenant.com/api/v2/otlp/v1/traces` |
+| `OTEL_EXPORTER_OTLP_HEADERS` | Yes | Authorization headers with API token | `Authorization=Api-Token dt0c01.ABC...` |
+| `OTEL_RESOURCE_ATTRIBUTES` | Yes | Service identification attributes | `service.name=mcp-server,service.version=1.0.0` |
+| `OTEL_TRACES_EXPORTER` | No | Traces exporter protocol | `otlp` |
+| `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` | No | OTLP protocol format | `http/protobuf` |
+
+> **✨ New**: Built-in OpenTelemetry integration with parent-child span relationships and automatic HTTP instrumentation!
 
 
 ### API Token Permissions
@@ -269,17 +294,75 @@ Your Dynatrace API token must have the following permissions:
 - `eventProperties.read` - To read event properties
 - `eventTypes.read` - To read event types
 
+---
+
+## 📡 OpenTelemetry Tracing
+
+This MCP server includes **built-in OpenTelemetry integration** with automatic distributed tracing for complete observability.
+
+### ✨ Features
+
+- **🔗 Parent-Child Span Relationships**: Proper trace hierarchy using tool wrapper pattern
+- **📊 Automatic HTTP Instrumentation**: All API calls to Dynatrace are traced
+- **🎯 Service Identification**: Configurable service name and version
+- **⚡ Zero-Configuration**: Auto-registration with custom instrumentation library
+- **🔍 Full Observability**: Request tracking, error rates, and performance metrics
+
+### 🚀 Quick Setup
+
+1. **Configure OTLP Export** in your MCP configuration:
+
+```json
+{
+  "env": {
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "https://your-tenant.com/api/v2/otlp/v1/traces",
+    "OTEL_EXPORTER_OTLP_HEADERS": "Authorization=Api-Token your-token-here",
+    "OTEL_RESOURCE_ATTRIBUTES": "service.name=mcp-server,service.version=1.0.0"
+  }
+}
+```
+
+2. **View Traces in Dynatrace**:
+   - Navigate to **Applications & Microservices → Distributed traces**
+   - Filter by your service name (e.g., `mcp-server`)
+   - See complete MCP tool execution traces with API call details
+
+### 🔍 Trace Structure
+
+Each MCP tool call creates a structured trace:
+
+```text
+Tool.list_problems (Parent Span)
+  ├── mcp.tool:list_problems (MCP Instrumentation)
+  └── GET /api/v2/problems (HTTP Call)
+
+Tool.get_entity (Parent Span)  
+  ├── mcp.tool:get_entity (MCP Instrumentation)
+  └── GET /api/v2/entities/{id} (HTTP Call)
+```
+
+### 📈 Observability Benefits
+
+- **Performance Monitoring**: Track tool execution times and API latency
+- **Error Tracking**: Automatic exception recording and error rates
+- **Usage Analytics**: Monitor which tools are used most frequently
+- **Dependency Mapping**: Visualize relationships between MCP tools and Dynatrace APIs
+- **Alerting**: Set up alerts on trace performance or error rates
+
+> **Powered by**: [@theharithsa/opentelemetry-instrumentation-mcp](https://www.npmjs.com/package/@theharithsa/opentelemetry-instrumentation-mcp) v1.0.4
+
+---
 
 ## Development
 
-
 ### Building
+
 ```bash
 npm run build
 ```
 
-
 ### Running Tests
+
 ```bash
 # Unit tests
 npm test
@@ -292,6 +375,7 @@ npm run test:watch
 ```
 
 ### Linting
+
 ```bash
 npm run lint
 npm run lint:fix
@@ -302,7 +386,7 @@ npm run lint:fix
 
 This server implements the Dynatrace Managed Events API v2. For detailed API documentation, refer to your Dynatrace Managed cluster's API documentation at:
 
-```
+```text
 https://your-managed-cluster.com/e/{environment-id}/api/swagger-ui/
 ```
 
@@ -344,6 +428,7 @@ MIT License - see LICENSE file for details
 ## Support
 
 For issues and questions:
+
 1. Check the troubleshooting section below
 2. Review your Dynatrace Managed cluster's API documentation
 3. Create an issue in the project repository
@@ -354,7 +439,9 @@ For issues and questions:
 ### Connection Issues
 
 **Problem**: "Failed to connect to Dynatrace Managed"
+
 **Solutions**:
+
 - Verify your `DYNATRACE_MANAGED_URL` is correct and accessible
 - Check that your `DYNATRACE_ENVIRONMENT_ID` is correct
 - Check that your API token is valid and has proper permissions
@@ -364,7 +451,9 @@ For issues and questions:
 ### Authentication Issues
 
 **Problem**: "Unauthorized" or "Forbidden" errors
+
 **Solutions**:
+
 - Verify your API token is correct
 - Check that the token has the required permissions (events.read, events.write, etc.)
 - Ensure the token hasn't expired
@@ -373,7 +462,9 @@ For issues and questions:
 ### Event Management Issues
 
 **Problem**: Event retrieval or ingestion errors
+
 **Solutions**:
+
 - Review the event selector and entity selector parameters for correct format
 - Check that the event types and properties exist
 - Verify timestamp formats and ranges

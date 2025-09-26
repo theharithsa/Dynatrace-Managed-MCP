@@ -1,11 +1,11 @@
 {
-  "name": "dynatrace-managed-events-mcp",
-  "version": "1.0.0",
-  "description": "Model Context Protocol server for Dynatrace Managed with Events API support",
+  "name": "@dynatrace/dynatrace-managed-mcp-server",
+  "version": "1.1.0",
+  "description": "Dynatrace Managed MCP Server - Model Context Protocol integration for comprehensive observability, security analysis, and DevOps automation with Dynatrace Managed",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "dynatrace-managed-events-mcp": "dist/index.js"
+    "dynatrace-managed-mcp": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -13,38 +13,80 @@
     "start": "node dist/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "prepare": "npm run build"
+    "clean": "rimraf dist",
+    "prepare": "npm run clean && npm run build",
+    "prepublishOnly": "npm run test && npm run build",
+    "docker:build": "docker build -t dynatrace-managed-mcp .",
+    "docker:run": "docker run --env-file .env -p 3000:3000 dynatrace-managed-mcp"
   },
   "keywords": [
     "dynatrace",
     "managed",
     "mcp",
     "model-context-protocol",
+    "observability",
+    "monitoring",
+    "security",
+    "devops",
+    "sre",
+    "incident-response",
+    "problems",
+    "metrics",
     "events",
-    "events-api",
-    "api"
+    "entities",
+    "audit-logs",
+    "vulnerabilities",
+    "ai",
+    "llm",
+    "claude",
+    "chatgpt"
   ],
-  "author": "Dynatrace Managed Team",
+  "author": {
+    "name": "Dynatrace Managed Team",
+    "email": "support@dynatrace.com"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theharithsa/Dynatrace-Managed-MCP.git"
+  },
+  "bugs": {
+    "url": "https://github.com/theharithsa/Dynatrace-Managed-MCP/issues"
+  },
+  "homepage": "https://github.com/theharithsa/Dynatrace-Managed-MCP#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "axios": "^1.6.0",
+    "@theharithsa/opentelemetry-instrumentation-mcp": "^1.0.4",
+    "axios": "^1.7.0",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.0",
     "zod": "^3.25.76",
     "zod-to-json-schema": "^3.24.6"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "tsx": "^4.6.0",
-    "typescript": "^5.3.0"
+    "@types/jest": "^29.5.0",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "jest": "^29.7.0",
+    "rimraf": "^6.0.0",
+    "ts-jest": "^29.2.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "files": [
     "dist/**/*",
+    "dynatrace-agent-rules/**/*",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
   ]
 }
