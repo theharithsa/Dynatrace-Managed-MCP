@@ -1,6 +1,6 @@
 {
   "name": "@theharithsa/dynatrace-managed-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Dynatrace Managed MCP Server - Model Context Protocol integration for comprehensive observability, security analysis, and DevOps automation with Dynatrace Managed",
   "publishConfig": {
     "access": "public"
