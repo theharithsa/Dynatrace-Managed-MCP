@@ -1,0 +1,69 @@
+# Source files (TypeScript)
+src/
+
+# Development files
+*.ts
+!*.d.ts
+tsconfig.json
+jest.config.js
+.eslintrc*
+eslint.config.*
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+__tests__/
+coverage/
+
+# Development dependencies
+node_modules/
+
+# Git files
+.git/
+.gitignore
+.github/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Debug files
+debug-*.js
+*.log
+npm-debug.log*
+
+# Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Scripts
+scripts/
+
+# Documentation (keep README, LICENSE, CHANGELOG)
+docs/
+examples/
+reports/
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Build artifacts
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.md
+!README.md
+!LICENSE
+!CHANGELOG.md
+!CONTRIBUTING.md
+!CODE_OF_CONDUCT.md
+!SECURITY.md

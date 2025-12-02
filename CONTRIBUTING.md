@@ -1,172 +1,357 @@
 # Contributing to Dynatrace Managed MCP Server
 
-We welcome contributions to the Dynatrace Managed MCP Server! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing! This document provides guidelines and instructions for contributing to this project.
 
-## Getting Started
+## 📋 Table of Contents
+
+- [Code of Conduct](#code-of-conduct)
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [How to Contribute](#how-to-contribute)
+- [Pull Request Process](#pull-request-process)
+- [Coding Standards](#coding-standards)
+- [Adding New Tools](#adding-new-tools)
+- [Testing](#testing)
+- [Documentation](#documentation)
+
+---
+
+## 📜 Code of Conduct
+
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to uphold this code.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm 9+
-- TypeScript 5.6+
-- Access to a Dynatrace Managed environment
+- **Node.js** 18.0.0 or higher
+- **npm** 9.0.0 or higher
+- **TypeScript** 5.6 or higher
+- **Git** for version control
+- Access to a **Dynatrace Managed** environment for testing
 
-### Development Setup
+### Fork and Clone
 
-1. **Fork and clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/Dynatrace-Managed-MCP.git
-   cd Dynatrace-Managed-MCP
-   ```
+```bash
+# Fork the repository on GitHub, then clone your fork
+git clone https://github.com/YOUR_USERNAME/Dynatrace-Managed-MCP.git
+cd Dynatrace-Managed-MCP
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your Dynatrace Managed credentials
-   ```
-
-4. **Build and test**
-   ```bash
-   npm run build
-   npm test
-   ```
-
-## Development Guidelines
-
-### Code Style
-
-- Follow TypeScript best practices
-- Use ESLint and Prettier for consistent formatting
-- Write comprehensive JSDoc comments for all public APIs
-- Follow the existing code patterns and architecture
-
-### Testing
-
-- Write unit tests for all new functionality
-- Ensure test coverage remains above 70%
-- Test with real Dynatrace Managed environments when possible
-- Use descriptive test names and organize tests logically
-
-### Commit Guidelines
-
-Follow conventional commit format:
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
+# Add upstream remote
+git remote add upstream https://github.com/theharithsa/Dynatrace-Managed-MCP.git
 ```
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+---
 
-Examples:
-- `feat(auth): add token validation middleware`
-- `fix(metrics): resolve query timeout issues`
-- `docs(readme): update installation instructions`
+## 🛠️ Development Setup
 
-### Pull Request Process
+### 1. Install Dependencies
 
-1. **Create a feature branch**
-   ```bash
-   git checkout -b feat/your-feature-name
-   ```
+```bash
+npm install
+```
 
-2. **Make your changes**
-   - Follow the coding standards
-   - Add/update tests as needed
-   - Update documentation
+### 2. Configure Environment
 
-3. **Test thoroughly**
-   ```bash
-   npm run lint
-   npm test
-   npm run build
-   ```
+```bash
+cp .env.example .env
+```
 
-4. **Commit and push**
-   ```bash
-   git add .
-   git commit -m "feat(scope): your descriptive message"
-   git push origin feat/your-feature-name
-   ```
+Edit `.env` with your Dynatrace Managed credentials:
 
-5. **Create Pull Request**
-   - Use a clear, descriptive title
-   - Reference any related issues
-   - Include testing instructions
-   - Add screenshots for UI changes
+```env
+DYNATRACE_MANAGED_URL=https://your-cluster.dynatrace.com
+DYNATRACE_ENVIRONMENT_ID=your-env-id
+DYNATRACE_API_TOKEN=your-api-token
+```
 
-## Adding New Tools
+### 3. Build and Test
 
-When adding new MCP tools:
+```bash
+# Build the project
+npm run build
 
-1. **Create the tool function** in `src/capabilities/`
-2. **Follow the existing patterns** for error handling and validation  
-3. **Add Zod schemas** for input validation
-4. **Update the tool registry** in `src/index.ts`
-5. **Add comprehensive tests**
-6. **Update documentation**
+# Run tests
+npm test
 
-Example tool structure:
+# Run in development mode
+npm run dev
+```
+
+---
+
+## 🤝 How to Contribute
+
+### Types of Contributions
+
+| Type | Description |
+|------|-------------|
+| 🐛 **Bug Fixes** | Fix issues and improve stability |
+| ✨ **New Features** | Add new tools or capabilities |
+| 📚 **Documentation** | Improve docs, examples, and guides |
+| 🧪 **Tests** | Add or improve test coverage |
+| 🔧 **Refactoring** | Improve code quality without changing behavior |
+
+### Reporting Issues
+
+Before creating an issue:
+
+1. Search existing issues to avoid duplicates
+2. Use the issue templates when available
+3. Provide detailed reproduction steps
+4. Include environment information
+
+### Suggesting Features
+
+1. Open a GitHub Discussion first for major features
+2. Describe the use case and expected behavior
+3. Consider backward compatibility
+
+---
+
+## 📝 Pull Request Process
+
+### 1. Create a Branch
+
+```bash
+# Sync with upstream
+git fetch upstream
+git checkout main
+git merge upstream/main
+
+# Create feature branch
+git checkout -b feat/your-feature-name
+```
+
+### 2. Make Changes
+
+- Follow the [coding standards](#coding-standards)
+- Write tests for new functionality
+- Update documentation as needed
+
+### 3. Commit Changes
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```bash
+# Format: type(scope): description
+git commit -m "feat(problems): add problem correlation tool"
+git commit -m "fix(metrics): resolve pagination issue"
+git commit -m "docs(readme): update installation guide"
+```
+
+**Types:**
+
+| Type | Description |
+|------|-------------|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `style` | Code style (formatting, etc.) |
+| `refactor` | Code refactoring |
+| `test` | Adding or updating tests |
+| `chore` | Maintenance tasks |
+
+### 4. Push and Create PR
+
+```bash
+git push origin feat/your-feature-name
+```
+
+Then create a Pull Request on GitHub with:
+
+- Clear title following conventional commit format
+- Description of changes
+- Link to related issues
+- Screenshots if applicable
+
+---
+
+## 📏 Coding Standards
+
+### TypeScript Guidelines
+
 ```typescript
-export async function yourNewTool(args: YourSchema) {
-  // Validate input
-  const validation = YourSchema.safeParse(args);
-  if (!validation.success) {
-    throw new Error(`Invalid input: ${validation.error.message}`);
-  }
+// ✅ Good: Use explicit types
+function getEntity(entityId: string): Promise<Entity> {
+  // ...
+}
 
-  // Implementation
-  // Return raw JSON for AI interpretation
+// ✅ Good: Use Zod for validation
+const Schema = z.object({
+  entityId: z.string().describe('The entity ID'),
+  fields: z.string().optional().describe('Fields to include'),
+});
+
+// ✅ Good: Handle errors properly
+const parsed = Schema.safeParse(args);
+if (!parsed.success) {
+  throw new Error(`Invalid arguments: ${parsed.error.message}`);
 }
 ```
 
-## Documentation
+### File Naming
 
-- Update README.md for significant changes
-- Add JSDoc comments for all public APIs  
-- Update agent rules if adding new capabilities
-- Include usage examples for new features
+- Use kebab-case for files: `list-problems.ts`
+- Use PascalCase for types/interfaces: `DynatraceEnv`
+- Use camelCase for variables/functions: `getEntityById`
 
-## Security Considerations
+### Code Organization
 
-- Never commit API tokens or credentials
-- Validate all inputs thoroughly
-- Follow secure coding practices
-- Report security issues privately
+```typescript
+// 1. Imports
+import { z } from 'zod';
+import axios from 'axios';
+import { DynatraceEnv } from '../getDynatraceEnv.js';
 
-## Code Review Criteria
+// 2. Schema definition
+const Schema = z.object({
+  // ...
+});
 
-Pull requests will be reviewed for:
+// 3. Export tool object
+export const toolName = {
+  definition: {
+    name: 'tool_name',
+    description: 'Tool description',
+    inputSchema: zodToJsonSchema(Schema),
+  },
+  handler: async (args: unknown, dtEnv: DynatraceEnv) => {
+    // Implementation
+  },
+};
+```
 
-- **Functionality**: Does it work as intended?
-- **Code Quality**: Is it readable, maintainable, and well-structured?
-- **Testing**: Are there adequate tests with good coverage?
-- **Documentation**: Is it properly documented?
-- **Security**: Does it follow security best practices?
-- **Performance**: Is it efficient and scalable?
+---
 
-## Release Process
+## ➕ Adding New Tools
 
-1. Version bumps follow semantic versioning (SemVer)
-2. Releases are automated via GitHub Actions
-3. Changelog is generated from conventional commits
-4. Docker images are built and published automatically
+### Step 1: Create Tool File
 
-## Getting Help
+Create `src/capabilities/your-tool-name.ts`:
 
-- **Issues**: Use GitHub Issues for bug reports and feature requests
-- **Discussions**: Use GitHub Discussions for questions and ideas
-- **Documentation**: Check the comprehensive README and agent rules
+```typescript
+import { z } from 'zod';
+import { zodToJsonSchema } from 'zod-to-json-schema';
+import axios from 'axios';
+import { DynatraceEnv } from '../getDynatraceEnv.js';
 
-## License
+const Schema = z.object({
+  param1: z.string().describe('Parameter description'),
+  param2: z.number().optional().describe('Optional parameter'),
+});
 
-By contributing to this project, you agree that your contributions will be licensed under the MIT License.
+export const yourToolName = {
+  definition: {
+    name: 'your_tool_name',
+    description: 'Clear description of what this tool does',
+    inputSchema: zodToJsonSchema(Schema),
+  },
+  
+  handler: async (args: unknown, dtEnv: DynatraceEnv) => {
+    const parsed = Schema.safeParse(args);
+    if (!parsed.success) {
+      throw new Error(`Invalid arguments: ${parsed.error.message}`);
+    }
 
-Thank you for contributing to make Dynatrace Managed MCP Server better! 🎉
+    const { param1, param2 } = parsed.data;
+    
+    const response = await axios.get(
+      `${dtEnv.url}/e/${dtEnv.environmentId}/api/v2/endpoint`,
+      {
+        headers: { Authorization: `Api-Token ${dtEnv.token}` },
+        params: { param1, param2 },
+      }
+    );
+
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify(response.data, null, 2),
+      }],
+    };
+  },
+};
+```
+
+### Step 2: Register in index.ts
+
+Add the import and register the tool in `src/index.ts`.
+
+### Step 3: Add Tests
+
+Create `test/your-tool-name.test.ts`.
+
+### Step 4: Update Documentation
+
+- Add to README.md tool list
+- Create prompt guide in `dynatrace-agent-rules/`
+
+---
+
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Run specific test
+npm test -- --grep "list_problems"
+
+# Watch mode
+npm run test:watch
+```
+
+### Writing Tests
+
+```typescript
+describe('list_problems', () => {
+  it('should list problems with default parameters', async () => {
+    const result = await listProblems.handler({}, mockDtEnv);
+    expect(result.content).toBeDefined();
+    expect(result.content[0].type).toBe('text');
+  });
+
+  it('should handle invalid parameters', async () => {
+    await expect(
+      listProblems.handler({ pageSize: -1 }, mockDtEnv)
+    ).rejects.toThrow();
+  });
+});
+```
+
+---
+
+## 📚 Documentation
+
+### What to Document
+
+- All public APIs and tools
+- Configuration options
+- Usage examples
+- Error handling
+
+### Documentation Style
+
+- Use clear, concise language
+- Include code examples
+- Keep docs up-to-date with code changes
+
+---
+
+## ❓ Questions?
+
+- Open a [GitHub Discussion](https://github.com/theharithsa/Dynatrace-Managed-MCP/discussions)
+- Check existing issues and discussions
+- Review the [README](README.md) for common questions
+
+---
+
+Thank you for contributing! 🎉

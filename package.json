@@ -1,7 +1,10 @@
 {
-  "name": "@dynatrace/dynatrace-managed-mcp-server",
-  "version": "1.1.0",
+  "name": "@theharithsa/dynatrace-managed-mcp-server",
+  "version": "1.0.0",
   "description": "Dynatrace Managed MCP Server - Model Context Protocol integration for comprehensive observability, security analysis, and DevOps automation with Dynatrace Managed",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -45,8 +48,8 @@
     "chatgpt"
   ],
   "author": {
-    "name": "Dynatrace Managed Team",
-    "email": "support@dynatrace.com"
+    "name": "Vishruth Harithsa",
+    "url": "https://github.com/theharithsa"
   },
   "license": "MIT",
   "repository": {
