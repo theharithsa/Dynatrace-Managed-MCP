@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@theharithsa/dynatrace-managed-mcp-server"><img src="https://img.shields.io/npm/v/@theharithsa/dynatrace-managed-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=CB3837" alt="npm version"/></a>
-  <a href="https://www.npmjs.com/package/@theharithsa/dynatrace-managed-mcp-server"><img src="https://img.shields.io/npm/dm/@theharithsa/dynatrace-managed-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=CB3837" alt="npm downloads"/></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT"/></a>
+  <a href="https://www.npmjs.com/package/@theharithsa/dynatrace-managed-mcp-server"><img src="https://img.shields.io/npm/v/@theharithsa/dynatrace-managed-mcp-server?style=for-the-badge&logo=npm&logoColor=white&label=NPM" alt="npm version"/></a>
+  <a href="https://www.npmjs.com/package/@theharithsa/dynatrace-managed-mcp-server"><img src="https://img.shields.io/npm/dm/@theharithsa/dynatrace-managed-mcp-server?style=for-the-badge&logo=npm&logoColor=white&label=Downloads" alt="npm downloads"/></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/theharithsa/Dynatrace-Managed-MCP?style=for-the-badge" alt="License"/></a>
 </p>
 
 <p align="center">
@@ -25,49 +25,53 @@
   <a href="https://github.com/theharithsa/Dynatrace-Managed-MCP/stargazers"><img src="https://img.shields.io/github/stars/theharithsa/Dynatrace-Managed-MCP?style=for-the-badge&logo=github" alt="GitHub stars"/></a>
   <a href="https://github.com/theharithsa/Dynatrace-Managed-MCP/issues"><img src="https://img.shields.io/github/issues/theharithsa/Dynatrace-Managed-MCP?style=for-the-badge&logo=github" alt="GitHub issues"/></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/@theharithsa/dynatrace-managed-mcp-server?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js Version"/></a>
-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.6-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/github/languages/top/theharithsa/Dynatrace-Managed-MCP?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/></a>
 </p>
 
 ---
 
 ## Table of Contents
 
-- [Features](#-features)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Available Tools](#-available-tools-39-total)
-- [OpenTelemetry Integration](#-opentelemetry-integration)
-- [Prompt Guides](#-prompt-guides)
-- [Development](#-development)
-- [API Token Permissions](#-api-token-permissions)
-- [Troubleshooting](#-troubleshooting)
-- [Authors](#-authors)
-- [Contributing](#-contributing)
-- [Support](#-support)
+- [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Available Tools](#available-tools-39-total)
+- [OpenTelemetry Integration](#opentelemetry-integration)
+- [Prompt Guides](#prompt-guides)
+- [Development](#development)
+- [API Token Permissions](#api-token-permissions)
+- [Troubleshooting](#troubleshooting)
+- [Authors](#authors)
+- [Contributing](#contributing)
+- [Support](#support)
 
 ---
 
 ## Features
 
 ### Production Ready
+
 - **39 comprehensive tools** covering the complete Dynatrace API
 - Enterprise-grade error handling
 - Request tracking with UUID
 - Automatic retry logic
 
 ### Full Observability
+
 - Built-in OpenTelemetry tracing
 - Parent-child span relationships
 - Performance metrics
 - Error tracking with stack traces
 
 ### AI-First Design
+
 - Raw JSON responses for LLM interpretation
 - No pre-formatting - let AI handle presentation
 - Future-proof API field support
 - Universal client compatibility
 
 ### Enterprise Security
+
 - API token authentication
 - Secure credential handling
 - Configurable timeouts
