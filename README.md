@@ -138,8 +138,8 @@ Create `.vscode/mcp.json` in your workspace:
 {
   "servers": {
     "dynatrace-managed": {
-      "command": "node",
-      "args": ["dist/index.js"],
+      "command": "npx",
+      "args": ["@theharithsa/dynatrace-managed-mcp-server"],
       "env": {
         "DYNATRACE_MANAGED_URL": "https://your-cluster.dynatrace.com",
         "DYNATRACE_ENVIRONMENT_ID": "your-environment-id",

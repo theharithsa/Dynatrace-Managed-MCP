@@ -8,6 +8,7 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
+    "dynatrace-managed-mcp-server": "dist/index.js",
     "dynatrace-managed-mcp": "dist/index.js"
   },
   "scripts": {
