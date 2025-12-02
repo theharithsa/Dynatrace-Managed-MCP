@@ -382,6 +382,36 @@ DEBUG=mcp:* npm start
 
 ---
 
+## Troubleshooting
+
+### Windows: `npx` command not recognized
+
+If you encounter `'dynatrace-managed-mcp-server' is not recognized as an internal or external command` when running `npx @theharithsa/dynatrace-managed-mcp-server`, the npm global bin folder may not be in your PATH.
+
+**Solution:**
+
+1. Add the npm global bin folder to your PATH:
+   ```powershell
+   [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Users\<username>\AppData\Roaming\npm", [EnvironmentVariableTarget]::User)
+   ```
+
+2. Restart VS Code or your terminal for the PATH change to take effect.
+
+3. Verify the installation:
+   ```bash
+   npx @theharithsa/dynatrace-managed-mcp-server --help
+   ```
+
+### Alternative: Use the installed command directly
+
+If you've installed the package globally, you can run it directly:
+```bash
+npm install -g @theharithsa/dynatrace-managed-mcp-server
+dynatrace-managed-mcp-server --help
+```
+
+---
+
 ## Authors
 
 - **Vishruth Harithsa** - [@theharithsa](https://github.com/theharithsa)
