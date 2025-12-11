@@ -1,8 +1,5 @@
 ﻿# Dynatrace Managed MCP Server
 
-<p align="center">
-  <img src="https://assets.dynatrace.com/content/dam/dynatrace/misc/dynatrace_web.png" alt="Dynatrace" width="400"/>
-</p>
 
 <p align="center">
   <strong>A comprehensive Model Context Protocol server for Dynatrace Managed environments</strong>
